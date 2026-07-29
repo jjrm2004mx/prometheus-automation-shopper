@@ -6,6 +6,8 @@ import { usePageMeta } from '../lib/usePageMeta';
 import { Button, Card, Metric, Section, Accordion } from '../components/ui';
 import { whatsappUrl } from '../components/Layout';
 import { processSteps, advantages, faqs } from '../content/data';
+import { afterBooking, homeTimeline, intentionPoints } from '../content/catalog';
+import { ArtByIndex, Figure } from '../components/Art';
 
 export default function Home() {
   const tenant = useTenant();
@@ -72,14 +74,66 @@ export default function Home() {
       </Section>
 
       <Section eyebrow={t('home.advantage.eyebrow')} title={t('home.advantage.title')} className="bg-surface">
-        <div className="grid gap-4 sm:grid-cols-3">
-          {advantages.map((a) => (
-            <Card key={a.title} className="bg-background h-full">
-              <h3 className="headline-sm">{a.title}</h3>
-              <p className="body-sm mt-2">{a.body}</p>
-            </Card>
-          ))}
+        <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-center">
+          <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
+            {advantages.map((a) => (
+              <Card key={a.title} className="bg-background h-full">
+                <h3 className="headline-sm">{a.title}</h3>
+                <p className="body-sm mt-2">{a.body}</p>
+              </Card>
+            ))}
+          </div>
+          <Figure ratio="aspect-[4/3]" className="hidden lg:block">
+            <ArtByIndex index={5} label="Videollamada de compra en vivo" />
+          </Figure>
         </div>
+      </Section>
+
+      <Section eyebrow="Paso a paso" title="Después de reservar">
+        <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 max-w-5xl">
+          {afterBooking.map((s, i) => (
+            <li key={s.title}>
+              <Card className="h-full">
+                <span className="text-sm font-semibold tabular-nums text-text-tertiary">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <h3 className="headline-sm mt-3">{s.title}</h3>
+                <p className="body-sm mt-2">{s.body}</p>
+              </Card>
+            </li>
+          ))}
+        </ol>
+      </Section>
+
+      <Section eyebrow="Claro y directo" title="¿Y cuándo pago?" className="bg-surface">
+        <ol className="max-w-3xl divide-y divide-border border-y border-border">
+          {homeTimeline.map((s) => (
+            <li key={s.label} className="flex items-baseline gap-4 py-4">
+              <span
+                className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${
+                  s.highlight ? 'bg-primary text-primary-foreground' : 'bg-background text-text-tertiary'
+                }`}
+              >
+                {s.highlight ? 'PAGO AQUÍ' : '·'}
+              </span>
+              <div>
+                <p className="font-medium text-foreground">{s.label}</p>
+                <p className="body-sm mt-0.5">{s.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </Section>
+
+      <Section title="No solo te mostramos cosas.">
+        <p className="body-lg max-w-2xl mb-8">
+          Te ayudamos a comprar mejor. Cada selección tiene propósito.
+        </p>
+        <ul className="flex flex-wrap gap-2 max-w-3xl">
+          {intentionPoints.map((p) => (
+            <li key={p} className="chip chip-idle">{p}</li>
+          ))}
+        </ul>
       </Section>
 
       <Section eyebrow={t('home.invest.eyebrow')} title={t('home.invest.title')}>

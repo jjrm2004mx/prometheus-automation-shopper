@@ -81,13 +81,86 @@ export function Header() {
 export function Footer() {
   const tenant = useTenant();
   const t = createCopy(tenant);
+  const f = tenant.features;
+
+  // El pie es también el mapa del sitio: cada ruta pública debe ser alcanzable
+  // con un enlace real, no solo existir en el router.
+  const columns: Array<{ title: string; links: Array<[string, string]> }> = [
+    {
+      title: 'El servicio',
+      links: [
+        ['/como-funciona', t('nav.process')],
+        ['/lo-que-veras', 'Lo que verás'],
+        ['/sobre', 'Sobre nosotros'],
+        ['/galeria', 'Galería'],
+        ['/testimonios', 'Testimonios'],
+      ],
+    },
+    {
+      title: 'Números',
+      links: [
+        ['/numeros', t('nav.numbers')],
+        ['/precios', 'Precios'],
+        ...(f.calculator
+          ? ([
+              ['/calculadora', 'Calculadora de costo'],
+              ['/ganancia-por-pieza', 'Ganancia por pieza'],
+              ['/inversion-y-ganancia', 'Inversión y ganancia'],
+              ['/compra-dolar', 'Conversión de moneda'],
+              ['/quiz-margen', 'Quiz de márgenes'],
+            ] as Array<[string, string]>)
+          : []),
+        ['/tabulador-tallas-zapatos', 'Tallas de calzado'],
+      ],
+    },
+    {
+      title: 'Tu compra',
+      links: [
+        ['/agendar', t('nav.cta')],
+        ...(f.orderDraft ? ([['/tu-pedido', 'Armar mi pedido']] as Array<[string, string]>) : []),
+        ['/pedidos', 'Estados del pedido'],
+        ['/paqueteria', 'Paquetería'],
+        ['/preguntas', t('nav.faq')],
+        ['/preguntar', 'Preguntar'],
+      ],
+    },
+    {
+      title: 'Más',
+      links: [
+        ...(f.lots ? ([['/lotes', t('nav.lots')]] as Array<[string, string]>) : []),
+        ...(f.school ? ([['/school', 'Escuela']] as Array<[string, string]>) : []),
+        ...(f.drops ? ([['/drops', 'Ready-to-ship drops']] as Array<[string, string]>) : []),
+        ['/web-para-shoppers', 'Web para shoppers'],
+      ],
+    },
+  ];
+
   return (
-    <footer className="border-t border-border py-10">
-      <div className="section-container flex flex-col sm:flex-row items-center justify-between gap-4">
-        <p className="text-sm text-text-tertiary">{t('footer.rights')}</p>
-        <div className="flex gap-5 text-sm text-text-secondary">
-          <Link to="/preguntas">{t('nav.faq')}</Link>
-          <a href={whatsappUrl(tenant.contact.whatsapp, tenant.contact.whatsappMessage)}>
+    <footer className="border-t border-border bg-surface">
+      <div className="section-container py-14">
+        <nav aria-label="Mapa del sitio" className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {columns.map((col) => (
+            <div key={col.title}>
+              <h2 className="eyebrow mb-4">{col.title}</h2>
+              <ul className="space-y-2.5">
+                {col.links.map(([to, label]) => (
+                  <li key={to}>
+                    <Link to={to} className="text-sm text-text-secondary hover:text-foreground transition-colors">
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </nav>
+
+        <div className="mt-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-t border-border pt-8">
+          <p className="text-sm text-text-tertiary">{t('footer.rights')}</p>
+          <a
+            href={whatsappUrl(tenant.contact.whatsapp, tenant.contact.whatsappMessage)}
+            className="text-sm text-text-secondary hover:text-foreground"
+          >
             {t('cta.whatsapp')}
           </a>
         </div>

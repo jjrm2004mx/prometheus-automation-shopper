@@ -102,6 +102,24 @@ export interface FeatureFlags {
   orderDraft: boolean;
 }
 
+/** Membresía de formación. Solo aplica si `features.school` está activa. */
+export interface SchoolConfig {
+  priceMonthly: number;
+  currency: Currency;
+  /** Destino del botón de alta (plataforma de comunidad, pasarela, etc.) */
+  joinUrl: string;
+  /** Aviso mostrado junto al botón mientras la integración no sea definitiva */
+  joinNotice?: string;
+  liveSchedule: string;
+}
+
+/** Paquetes listos para enviar. Solo aplica si `features.drops` está activa. */
+export interface DropsConfig {
+  locale: string;
+  currency: Currency;
+  shipsWithin: string;
+}
+
 /** Cada entrada sobrescribe un texto del contenido base. */
 export type ContentOverrides = Record<string, string>;
 
@@ -118,4 +136,6 @@ export interface TenantConfig {
   theme: ThemeConfig;
   features: FeatureFlags;
   content: ContentOverrides;
+  school?: SchoolConfig;
+  drops?: DropsConfig;
 }

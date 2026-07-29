@@ -71,8 +71,20 @@ export const tenants: TenantConfig[] = [
     },
     categories: defaultCategories,
     theme: monochrome,
-    features: { lots: true, calculator: true, school: false, drops: false, orderDraft: true },
+    features: { lots: true, calculator: true, school: true, drops: true, orderDraft: true },
     content: {},
+    school: {
+      priceMonthly: 50,
+      currency: 'USD',
+      joinUrl: 'https://example.com/comunidad',
+      joinNotice: 'Enlace temporal. Se conectará con la plataforma de comunidad.',
+      liveSchedule: 'Cada sábado · 12:00 PM CT',
+    },
+    drops: {
+      locale: 'en-US',
+      currency: 'USD',
+      shipsWithin: 'the United States',
+    },
   },
 ];
 

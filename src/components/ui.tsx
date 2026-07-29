@@ -50,15 +50,17 @@ export function Section({
   title,
   lead,
   className = '',
+  id,
 }: {
   children?: ReactNode;
   eyebrow?: string;
   title?: string;
   lead?: string;
   className?: string;
+  id?: string;
 }) {
   return (
-    <section className={`py-16 sm:py-24 ${className}`}>
+    <section id={id} className={`py-16 sm:py-24 ${className}`}>
       <div className="section-container">
         {eyebrow && <p className="eyebrow mb-3">{eyebrow}</p>}
         {title && <h2 className="headline-md mb-4">{title}</h2>}

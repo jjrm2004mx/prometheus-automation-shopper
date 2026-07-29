@@ -15,15 +15,35 @@ import path from 'node:path';
 const DIST = path.resolve('dist');
 const PORT = 4178;
 
+// Solo rutas públicas sin parámetro. Las dinámicas se documentan como excluidas
+// en la capacidad `platform-foundations`, no se omiten en silencio.
 const ROUTES = [
   '/',
   '/como-funciona',
+  '/lo-que-veras',
   '/numeros',
+  '/precios',
   '/preguntas',
   '/sobre',
+  '/galeria',
+  '/testimonios',
+  '/paqueteria',
+  '/pedidos',
+  '/preguntar',
+  '/web-para-shoppers',
+  '/tiktok',
   '/lotes',
+  '/school',
+  '/drops',
   '/calculadora',
+  '/ganancia-por-pieza',
+  '/inversion-y-ganancia',
+  '/compra-dolar',
+  '/quiz-margen',
+  '/tabulador-tallas-zapatos',
+  '/tu-pedido',
   '/transferencia',
+  '/confirmado',
   '/antes-de-tu-cita',
   '/envio',
 ];
@@ -85,5 +105,36 @@ for (const route of ROUTES) {
 await browser.close();
 server.close();
 
+// El sitemap se genera de la misma lista que se prerenderiza: no puede
+// desincronizarse de lo que realmente existe.
+const origin = process.env.SITE_ORIGIN ?? 'https://example.com';
+const today = process.env.BUILD_DATE ?? new Date().toISOString().slice(0, 10);
+const sitemap =
+  `<?xml version="1.0" encoding="UTF-8"?>\n` +
+  `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+  ROUTES.map(
+    (r) =>
+      `  <url><loc>${origin}${r === '/' ? '/' : r}</loc><lastmod>${today}</lastmod>` +
+      `<priority>${r === '/' ? '1.0' : '0.7'}</priority></url>`,
+  ).join('\n') +
+  `\n</urlset>\n`;
+await writeFile(path.join(DIST, 'sitemap.xml'), sitemap, 'utf8');
+
+const robots = [
+  'User-agent: *',
+  'Allow: /',
+  '',
+  'Disallow: /admin',
+  'Disallow: /pedido/',
+  'Disallow: /e/',
+  'Disallow: /c/',
+  'Disallow: /entrega/',
+  '',
+  `Sitemap: ${origin}/sitemap.xml`,
+  '',
+].join('\n');
+await writeFile(path.join(DIST, 'robots.txt'), robots, 'utf8');
+
 console.log(`\nPrerender: ${ok}/${ROUTES.length} rutas con contenido.`);
+console.log(`sitemap.xml con ${ROUTES.length} URLs · robots.txt escrito`);
 if (ok < ROUTES.length) process.exit(1);

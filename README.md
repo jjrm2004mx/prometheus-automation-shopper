@@ -76,15 +76,44 @@ producto:
 1. **Cada ruta pública se sirve con su contenido dentro del HTML.** Una SPA que
    responde un body vacío no existe para los buscadores.
 2. **El sitio público no arrastra la consola.** Presupuesto: menos de 500 KB de
-   JavaScript. Hoy el build entrega ~226 KB (~71 KB gzip).
+   JavaScript. Hoy el build entrega ~272 KB (~85 KB gzip) con las 28 rutas.
 3. **Un solo tipo de cambio vigente**, y congelado en cada pedido.
 4. **El zoom del usuario nunca se bloquea.**
 5. **El aislamiento entre shoppers se resuelve con RLS**, no ocultando pantallas.
+
+## Rutas públicas (28, todas prerenderizadas)
+
+**Marketing** — `/` · `/como-funciona` · `/lo-que-veras` · `/numeros` · `/precios` ·
+`/preguntas` · `/sobre` · `/galeria` · `/testimonios` · `/paqueteria` · `/pedidos` ·
+`/preguntar` · `/web-para-shoppers` · `/tiktok`
+
+**Flujo de cliente** — `/agendar` · `/tu-pedido` · `/transferencia` · `/reservar` ·
+`/confirmado` · `/antes-de-tu-cita` · `/envio`
+
+**Herramientas** — `/calculadora` · `/ganancia-por-pieza` · `/inversion-y-ganancia` ·
+`/compra-dolar` · `/quiz-margen` · `/tabulador-tallas-zapatos`
+
+**Líneas de negocio** — `/lotes` · `/school` · `/drops` (+ `/drops/:slug` y su checkout)
+
+Cada una se activa por bandera de tenant: una shopper sin escuela ni drops no
+registra esas rutas ni las muestra en el pie.
+
+El `sitemap.xml` y el `robots.txt` se generan de la misma lista que se
+prerenderiza, así que no pueden desincronizarse de lo que existe.
+
+## Imágenes
+
+Las ilustraciones son SVG en `src/components/Art.tsx`, no fotos. Heredan los
+tokens de tema, así que un tenant con otra paleta las obtiene en su color. Están
+pensadas como marcador: cada shopper sube su media real desde la consola.
 
 ## Qué falta
 
 - Consola de la shopper (alta, configuración, pedidos)
 - Persistencia de pedidos contra Supabase — hoy el asistente termina en local
 - Calendario de citas
-- Inventario de lotes
+- Catálogo de lotes con datos reales (hoy es la explicación + estado vacío)
+- Checkout real de drops (hoy declara que el pago no está conectado)
 - Notificaciones
+
+Los dos primeros tienen propuesta OpenSpec escrita en `openspec/changes/`.
