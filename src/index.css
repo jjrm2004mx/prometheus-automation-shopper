@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Tokens de tema. El resolvedor de tenant sobrescribe estas variables en
+ * tiempo de ejecución (ver src/lib/theme.ts), así que ningún componente
+ * escribe un color literal.
+ */
+@layer base {
+  :root {
+    --background: 0 0% 98%;
+    --foreground: 0 0% 12%;
+    --surface: 0 0% 96%;
+    --border: 0 0% 90%;
+    --accent: 0 0% 94%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 100%;
+    --text-secondary: 0 0% 40%;
+    --text-tertiary: 0 0% 60%;
+    --radius: 1rem;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-foreground ring-offset-2 ring-offset-background;
+  }
+}
+
+@layer components {
+  .section-container {
+    @apply mx-auto w-full max-w-content px-5 sm:px-8;
+  }
+
+  .display {
+    @apply text-4xl sm:text-6xl font-semibold tracking-[-0.03em] leading-[1.05];
+  }
+
+  .headline-lg {
+    @apply text-3xl sm:text-5xl font-semibold tracking-[-0.025em] leading-[1.1];
+  }
+
+  .headline-md {
+    @apply text-2xl sm:text-4xl font-semibold tracking-[-0.02em] leading-[1.15];
+  }
+
+  .headline-sm {
+    @apply text-xl sm:text-2xl font-semibold tracking-[-0.015em];
+  }
+
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-text-tertiary;
+  }
+
+  .body-lg {
+    @apply text-lg leading-relaxed text-text-secondary;
+  }
+
+  .body-sm {
+    @apply text-sm leading-relaxed text-text-secondary;
+  }
+
+  .card {
+    @apply rounded-2xl bg-surface border border-border p-6 sm:p-8;
+  }
+
+  .chip {
+    @apply px-4 py-2 rounded-full text-sm font-medium border transition-all;
+  }
+
+  .chip-idle {
+    @apply bg-surface border-border text-foreground hover:border-foreground/40;
+  }
+
+  .chip-active {
+    @apply bg-primary border-primary text-primary-foreground;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
