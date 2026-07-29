@@ -1,0 +1,41 @@
+schema: spec-driven
+
+context: |
+  Plataforma multi-tenant para personal shoppers. Una base de código y una base
+  de datos sirven a N shoppers; cada una tiene su dominio, su marca y sus
+  parámetros comerciales. Stack: React 18 + TypeScript + Vite, Tailwind sobre
+  tokens HSL aplicados en runtime, React Router, Supabase (Postgres con RLS,
+  Auth, Storage, Edge Functions). El build prerenderiza cada ruta pública.
+
+  Modelo mental: la plataforma es el código; un tenant es una shopper (fila en
+  `tenants` más su configuración); una clienta le compra a la shopper y no tiene
+  cuenta — accede por tokens opacos.
+
+  Reglas que no se negocian:
+
+  - Ningún valor de negocio literal en el código. Comisión, mínimos, montos,
+    marca, banco y categorías vienen de la configuración del tenant
+    (`src/config/schema.ts`). Ver la capacidad `tenant-configuration`.
+  - Ningún color literal: todo pasa por tokens CSS.
+  - Cada texto tiene una clave en `src/content/copy.ts` y el tenant puede
+    sobrescribirla.
+  - El aislamiento entre tenants se resuelve con RLS en la base, nunca ocultando
+    interfaz.
+  - Las clientas no leen tablas: sus portales pasan por Edge Function que valida
+    el token.
+  - La tasa de cambio se congela en el pedido; los números que ya vio la clienta
+    no cambian solos.
+  - Cada ruta pública debe servirse con su contenido dentro del HTML. El build
+    falla si alguna queda vacía.
+  - El sitio público no arrastra el código de la consola. Presupuesto: menos de
+    500 KB de JavaScript.
+  - El zoom del usuario nunca se bloquea.
+
+  Los specs están en español con las palabras clave en inglés (SHALL, WHEN,
+  THEN, AND) porque el parser las busca así.
+
+  Las capacidades heredadas del análisis del sitio de referencia
+  (`marketing-site`, `order-intake`, `booking-and-deposit`, `pre-appointment`,
+  `pricing-and-numbers`, `shipping-and-delivery`, `lots-catalog`,
+  `live-purchase-session`) traen los valores del tenant de ejemplo dentro de sus
+  escenarios. En el producto esos valores vienen de configuración.
