@@ -6,6 +6,7 @@ dist/
 build/
 .out/
 target/
+*.local
 
 # Vite
 .vite/
@@ -28,8 +29,9 @@ pnpm-debug.log*
 coverage/
 
 # IDEs and editors
-.vscode/
+.vscode/*
 .idea/
+!.vscode/extensions.json
 
 # OS files
 .DS_Store
